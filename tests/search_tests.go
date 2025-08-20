@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"terralense-registry-client/registry"
+	"github.com/TahirRiaz/terralense-registry-client/registry"
 
 	"github.com/sirupsen/logrus"
 )

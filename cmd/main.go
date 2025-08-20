@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"terralense-registry-client/registry"
-	"terralense-registry-client/tests"
+	"github.com/TahirRiaz/terralense-registry-client/registry"
+	"github.com/TahirRiaz/terralense-registry-client/tests"
 
 	"github.com/sirupsen/logrus"
 )
