@@ -108,6 +108,59 @@ provider, err := client.Providers.Get(ctx, "hashicorp", "aws")
 
 // Get provider documentation
 docs, err := client.Providers.ListDocs(ctx, "hashicorp", "aws", "5.0.0")
+
+// Get resources by subcategory (NEW!)
+latest, _ := client.Providers.GetLatest(ctx, "hashicorp", "azurerm")
+versionID, _ := client.Providers.GetVersionID(ctx, "hashicorp", "azurerm", latest.Version)
+
+// Method 1: Use convenience methods
+networkingResources, err := client.Providers.GetNetworkingResources(ctx, versionID)
+computeResources, err := client.Providers.GetComputeResources(ctx, versionID)
+storageResources, err := client.Providers.GetStorageResources(ctx, versionID)
+databaseResources, err := client.Providers.GetDatabaseResources(ctx, versionID)
+securityResources, err := client.Providers.GetSecurityResources(ctx, versionID)
+
+// Method 2: Use generic method with subcategory constant
+resources, err := client.Providers.GetResourcesBySubcategory(ctx, versionID, registry.SubcategoryNetworking)
+
+// Method 3: Get data sources by subcategory
+dataSources, err := client.Providers.GetDataSourcesBySubcategory(ctx, versionID, registry.SubcategoryNetworking)
+
+// Method 4: Use ListDocsV2 for full control
+opts := &registry.ProviderDocListOptions{
+    ProviderVersionID: versionID,
+    Category:          "resources",
+    Subcategory:       registry.SubcategoryNetworking,
+    Language:          "hcl",
+}
+docs, err := client.Providers.ListDocsV2(ctx, opts)
+
+// Method 5: Get a complete structured summary (NEW!)
+summary, err := client.Providers.GetProviderResourceSummary(ctx, "hashicorp", "aws", "latest")
+// Returns:
+// - summary.TotalResources
+// - summary.TotalDataSources
+// - summary.ResourcesBySubcategory (map[string][]ResourceInfo)
+// - summary.DataSourcesBySubcategory (map[string][]ResourceInfo)
+// - summary.AllSubcategories (sorted list)
+```
+
+#### Available Subcategory Constants
+
+```go
+registry.SubcategoryNetworking   // Networking resources (VPC, VNet, Subnets, etc.)
+registry.SubcategoryCompute      // Compute resources (VMs, EC2, etc.)
+registry.SubcategoryStorage      // Storage resources (S3, Blob Storage, etc.)
+registry.SubcategoryDatabase     // Database resources (RDS, SQL Database, etc.)
+registry.SubcategorySecurity     // Security resources (IAM, Security Groups, etc.)
+registry.SubcategoryIdentity     // Identity and access management
+registry.SubcategoryMonitoring   // Monitoring and logging resources
+registry.SubcategoryContainer    // Container resources (ECS, AKS, etc.)
+registry.SubcategoryServerless   // Serverless resources (Lambda, Functions, etc.)
+registry.SubcategoryAnalytics    // Analytics resources
+registry.SubcategoryMessaging    // Messaging and queueing resources
+registry.SubcategoryDeveloper    // Developer tools and resources
+registry.SubcategoryManagement   // Management and governance resources
 ```
 
 ### Policies

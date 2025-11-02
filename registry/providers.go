@@ -7,6 +7,48 @@ import (
 	"strings"
 )
 
+// Common provider documentation subcategories
+const (
+	// SubcategoryNetworking represents networking-related resources
+	SubcategoryNetworking = "Networking"
+
+	// SubcategoryCompute represents compute-related resources
+	SubcategoryCompute = "Compute"
+
+	// SubcategoryStorage represents storage-related resources
+	SubcategoryStorage = "Storage"
+
+	// SubcategoryDatabase represents database-related resources
+	SubcategoryDatabase = "Database"
+
+	// SubcategorySecurity represents security-related resources
+	SubcategorySecurity = "Security"
+
+	// SubcategoryIdentity represents identity and access management resources
+	SubcategoryIdentity = "Identity"
+
+	// SubcategoryMonitoring represents monitoring and logging resources
+	SubcategoryMonitoring = "Monitoring"
+
+	// SubcategoryContainer represents container-related resources
+	SubcategoryContainer = "Container"
+
+	// SubcategoryServerless represents serverless-related resources
+	SubcategoryServerless = "Serverless"
+
+	// SubcategoryAnalytics represents analytics-related resources
+	SubcategoryAnalytics = "Analytics"
+
+	// SubcategoryMessaging represents messaging and queueing resources
+	SubcategoryMessaging = "Messaging"
+
+	// SubcategoryDeveloper represents developer tools and resources
+	SubcategoryDeveloper = "Developer"
+
+	// SubcategoryManagement represents management and governance resources
+	SubcategoryManagement = "Management"
+)
+
 // ProvidersService handles communication with the provider related
 // methods of the Terraform Registry API.
 type ProvidersService struct {
@@ -292,6 +334,9 @@ type ProviderDocListOptions struct {
 	// Category filters docs by category (resources, data-sources, guides, etc.)
 	Category string
 
+	// Subcategory filters docs by subcategory (e.g., Networking, Compute, Storage)
+	Subcategory string
+
 	// Slug filters docs by slug
 	Slug string
 
@@ -365,6 +410,9 @@ func (s *ProvidersService) ListDocsV2(ctx context.Context, opts *ProviderDocList
 
 		if opts.Category != "" {
 			values.Add("filter[category]", opts.Category)
+		}
+		if opts.Subcategory != "" {
+			values.Add("filter[subcategory]", opts.Subcategory)
 		}
 		if opts.Slug != "" {
 			values.Add("filter[slug]", opts.Slug)
@@ -474,6 +522,296 @@ func (s *ProvidersService) GetOverviewDocs(ctx context.Context, providerVersionI
 	return content.String(), nil
 }
 
+// GetResourcesBySubcategory returns all resources for a specific subcategory
+func (s *ProvidersService) GetResourcesBySubcategory(ctx context.Context, providerVersionID, subcategory string) ([]ProviderData, error) {
+	if providerVersionID == "" {
+		return nil, &ValidationError{
+			Field:   "providerVersionID",
+			Value:   providerVersionID,
+			Message: "provider version ID cannot be empty",
+		}
+	}
+
+	if subcategory == "" {
+		return nil, &ValidationError{
+			Field:   "subcategory",
+			Value:   subcategory,
+			Message: "subcategory cannot be empty",
+		}
+	}
+
+	if !isValidSubcategory(subcategory) {
+		return nil, &ValidationError{
+			Field:   "subcategory",
+			Value:   subcategory,
+			Message: "invalid subcategory",
+		}
+	}
+
+	opts := &ProviderDocListOptions{
+		ProviderVersionID: providerVersionID,
+		Category:          "resources",
+		Subcategory:       subcategory,
+		Language:          "hcl",
+	}
+
+	docs, err := s.ListDocsV2(ctx, opts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get resources for subcategory %s: %w", subcategory, err)
+	}
+
+	return docs, nil
+}
+
+// GetNetworkingResources returns all networking resources for a provider version
+func (s *ProvidersService) GetNetworkingResources(ctx context.Context, providerVersionID string) ([]ProviderData, error) {
+	return s.GetResourcesBySubcategory(ctx, providerVersionID, SubcategoryNetworking)
+}
+
+// GetComputeResources returns all compute resources for a provider version
+func (s *ProvidersService) GetComputeResources(ctx context.Context, providerVersionID string) ([]ProviderData, error) {
+	return s.GetResourcesBySubcategory(ctx, providerVersionID, SubcategoryCompute)
+}
+
+// GetStorageResources returns all storage resources for a provider version
+func (s *ProvidersService) GetStorageResources(ctx context.Context, providerVersionID string) ([]ProviderData, error) {
+	return s.GetResourcesBySubcategory(ctx, providerVersionID, SubcategoryStorage)
+}
+
+// GetDatabaseResources returns all database resources for a provider version
+func (s *ProvidersService) GetDatabaseResources(ctx context.Context, providerVersionID string) ([]ProviderData, error) {
+	return s.GetResourcesBySubcategory(ctx, providerVersionID, SubcategoryDatabase)
+}
+
+// GetSecurityResources returns all security resources for a provider version
+func (s *ProvidersService) GetSecurityResources(ctx context.Context, providerVersionID string) ([]ProviderData, error) {
+	return s.GetResourcesBySubcategory(ctx, providerVersionID, SubcategorySecurity)
+}
+
+// GetDataSourcesBySubcategory returns all data sources for a specific subcategory
+func (s *ProvidersService) GetDataSourcesBySubcategory(ctx context.Context, providerVersionID, subcategory string) ([]ProviderData, error) {
+	if providerVersionID == "" {
+		return nil, &ValidationError{
+			Field:   "providerVersionID",
+			Value:   providerVersionID,
+			Message: "provider version ID cannot be empty",
+		}
+	}
+
+	if subcategory == "" {
+		return nil, &ValidationError{
+			Field:   "subcategory",
+			Value:   subcategory,
+			Message: "subcategory cannot be empty",
+		}
+	}
+
+	if !isValidSubcategory(subcategory) {
+		return nil, &ValidationError{
+			Field:   "subcategory",
+			Value:   subcategory,
+			Message: "invalid subcategory",
+		}
+	}
+
+	opts := &ProviderDocListOptions{
+		ProviderVersionID: providerVersionID,
+		Category:          "data-sources",
+		Subcategory:       subcategory,
+		Language:          "hcl",
+	}
+
+	docs, err := s.ListDocsV2(ctx, opts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get data sources for subcategory %s: %w", subcategory, err)
+	}
+
+	return docs, nil
+}
+
+// GetProviderResourceSummary creates a structured summary of all provider resources and data sources
+// organized by subcategory, returning only key information for application use
+func (s *ProvidersService) GetProviderResourceSummary(ctx context.Context, namespace, name, version string) (*ProviderResourceSummary, error) {
+	if err := validateProviderParams(namespace, name); err != nil {
+		return nil, err
+	}
+
+	// Get provider version ID
+	var versionID string
+	var actualVersion string
+	var err error
+
+	if version == "" || version == "latest" {
+		latest, err := s.GetLatest(ctx, namespace, name)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get latest version: %w", err)
+		}
+		actualVersion = latest.Version
+		versionID, err = s.GetVersionID(ctx, namespace, name, actualVersion)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get version ID: %w", err)
+		}
+	} else {
+		actualVersion = version
+		versionID, err = s.GetVersionID(ctx, namespace, name, version)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get version ID: %w", err)
+		}
+	}
+
+	// Get all resources
+	resourceOpts := &ProviderDocListOptions{
+		ProviderVersionID: versionID,
+		Category:          "resources",
+		Language:          "hcl",
+	}
+
+	resources, err := s.ListDocsV2(ctx, resourceOpts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get resources: %w", err)
+	}
+
+	// Get all data sources
+	dataSourceOpts := &ProviderDocListOptions{
+		ProviderVersionID: versionID,
+		Category:          "data-sources",
+		Language:          "hcl",
+	}
+
+	dataSources, err := s.ListDocsV2(ctx, dataSourceOpts)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get data sources: %w", err)
+	}
+
+	// Build the summary
+	summary := &ProviderResourceSummary{
+		ProviderNamespace:        namespace,
+		ProviderName:             name,
+		Version:                  actualVersion,
+		TotalResources:           len(resources),
+		TotalDataSources:         len(dataSources),
+		ResourcesBySubcategory:   make(map[string][]ResourceInfo),
+		DataSourcesBySubcategory: make(map[string][]ResourceInfo),
+		AllSubcategories:         make([]string, 0),
+	}
+
+	// Track unique subcategories
+	subcategorySet := make(map[string]bool)
+
+	// Process resources
+	for _, resource := range resources {
+		// Get detailed info to access subcategory
+		doc, err := s.GetDoc(ctx, resource.ID)
+		if err != nil {
+			// If we can't get details, skip this resource
+			continue
+		}
+
+		attrs := doc.Data.Attributes
+		subcategory := attrs.Subcategory
+		if subcategory == "" {
+			subcategory = "Other"
+		}
+
+		resourceInfo := ResourceInfo{
+			ID:          resource.ID,
+			Name:        attrs.Slug,
+			Title:       attrs.Title,
+			Subcategory: subcategory,
+			Category:    attrs.Category,
+			Slug:        attrs.Slug,
+			Path:        attrs.Path,
+		}
+
+		summary.ResourcesBySubcategory[subcategory] = append(
+			summary.ResourcesBySubcategory[subcategory],
+			resourceInfo,
+		)
+
+		subcategorySet[subcategory] = true
+	}
+
+	// Process data sources
+	for _, dataSource := range dataSources {
+		doc, err := s.GetDoc(ctx, dataSource.ID)
+		if err != nil {
+			continue
+		}
+
+		attrs := doc.Data.Attributes
+		subcategory := attrs.Subcategory
+		if subcategory == "" {
+			subcategory = "Other"
+		}
+
+		resourceInfo := ResourceInfo{
+			ID:          dataSource.ID,
+			Name:        attrs.Slug,
+			Title:       attrs.Title,
+			Subcategory: subcategory,
+			Category:    attrs.Category,
+			Slug:        attrs.Slug,
+			Path:        attrs.Path,
+		}
+
+		summary.DataSourcesBySubcategory[subcategory] = append(
+			summary.DataSourcesBySubcategory[subcategory],
+			resourceInfo,
+		)
+
+		subcategorySet[subcategory] = true
+	}
+
+	// Create sorted list of subcategories
+	for subcategory := range subcategorySet {
+		summary.AllSubcategories = append(summary.AllSubcategories, subcategory)
+	}
+
+	// Sort subcategories alphabetically
+	sortSubcategories(summary.AllSubcategories)
+
+	return summary, nil
+}
+
+// BuildResourceInfoFromDocs creates a simplified resource list from provider documentation
+// This is a lighter-weight alternative to GetProviderResourceSummary that doesn't fetch detailed docs
+func (s *ProvidersService) BuildResourceInfoFromDocs(docs []ProviderData) []ResourceInfo {
+	resources := make([]ResourceInfo, 0, len(docs))
+
+	for _, doc := range docs {
+		// Note: ProviderData doesn't contain subcategory, so we need to get doc details
+		// This method is provided for when you already have doc details
+		resources = append(resources, ResourceInfo{
+			ID:   doc.ID,
+			Type: doc.Type,
+		})
+	}
+
+	return resources
+}
+
+// ExtractResourceInfoFromProviderDocs extracts key resource information from raw provider documentation response
+// This is optimized for when you already have the full doc details and want to avoid additional API calls
+func ExtractResourceInfoFromProviderDocs(docs []ProviderDocDetails) []ResourceInfo {
+	resources := make([]ResourceInfo, 0, len(docs))
+
+	for _, doc := range docs {
+		attrs := doc.Data.Attributes
+
+		resources = append(resources, ResourceInfo{
+			ID:          doc.Data.ID,
+			Name:        attrs.Slug,
+			Title:       attrs.Title,
+			Subcategory: attrs.Subcategory,
+			Category:    attrs.Category,
+			Slug:        attrs.Slug,
+			Path:        attrs.Path,
+		})
+	}
+
+	return resources
+}
+
 // ProviderLatestVersion represents a provider with version info
 type ProviderLatestVersion struct {
 	Provider ProviderData
@@ -536,6 +874,37 @@ func isValidDocCategory(category string) bool {
 	return false
 }
 
+func isValidSubcategory(subcategory string) bool {
+	// Common subcategories across major cloud providers
+	// Note: This validation is lenient - providers may use custom subcategories
+	// We only validate against known common subcategories
+	validSubcategories := []string{
+		SubcategoryNetworking,
+		SubcategoryCompute,
+		SubcategoryStorage,
+		SubcategoryDatabase,
+		SubcategorySecurity,
+		SubcategoryIdentity,
+		SubcategoryMonitoring,
+		SubcategoryContainer,
+		SubcategoryServerless,
+		SubcategoryAnalytics,
+		SubcategoryMessaging,
+		SubcategoryDeveloper,
+		SubcategoryManagement,
+	}
+
+	for _, valid := range validSubcategories {
+		if subcategory == valid {
+			return true
+		}
+	}
+
+	// Allow any subcategory that's not empty (providers may have custom ones)
+	// This makes the validation lenient but still provides helpful constants
+	return subcategory != ""
+}
+
 func isValidLanguage(language string) bool {
 	// Add more languages as needed
 	validLanguages := []string{"hcl", "terraform", "json"}
@@ -545,4 +914,16 @@ func isValidLanguage(language string) bool {
 		}
 	}
 	return false
+}
+
+func sortSubcategories(subcategories []string) {
+	// Simple bubble sort for small lists
+	n := len(subcategories)
+	for i := 0; i < n-1; i++ {
+		for j := 0; j < n-i-1; j++ {
+			if subcategories[j] > subcategories[j+1] {
+				subcategories[j], subcategories[j+1] = subcategories[j+1], subcategories[j]
+			}
+		}
+	}
 }

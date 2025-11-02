@@ -146,6 +146,60 @@ type DocAttributes struct {
 	Truncated   bool   `json:"truncated"`
 }
 
+// ProviderResourceSummary represents a summarized view of provider resources
+type ProviderResourceSummary struct {
+	// ProviderNamespace is the provider namespace (e.g., "hashicorp")
+	ProviderNamespace string
+
+	// ProviderName is the provider name (e.g., "aws")
+	ProviderName string
+
+	// Version is the provider version
+	Version string
+
+	// TotalResources is the total number of resources
+	TotalResources int
+
+	// TotalDataSources is the total number of data sources
+	TotalDataSources int
+
+	// ResourcesBySubcategory groups resources by subcategory
+	ResourcesBySubcategory map[string][]ResourceInfo
+
+	// DataSourcesBySubcategory groups data sources by subcategory
+	DataSourcesBySubcategory map[string][]ResourceInfo
+
+	// AllSubcategories is a sorted list of all unique subcategories
+	AllSubcategories []string
+}
+
+// ResourceInfo represents key information about a single resource or data source
+type ResourceInfo struct {
+	// ID is the unique identifier from the registry
+	ID string
+
+	// Type is the resource type (e.g., "provider-docs")
+	Type string
+
+	// Name is the resource name/title (e.g., "ami", "vpc")
+	Name string
+
+	// Title is the full display title (e.g., "ami")
+	Title string
+
+	// Subcategory is the resource subcategory (e.g., "EC2 (Elastic Compute Cloud)")
+	Subcategory string
+
+	// Category is the resource category (resources or data-sources)
+	Category string
+
+	// Slug is the URL slug
+	Slug string
+
+	// Path is the documentation file path
+	Path string
+}
+
 // Module represents a Terraform module
 type Module struct {
 	ID          string    `json:"id"`

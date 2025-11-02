@@ -35,6 +35,30 @@ type ProvidersServiceInterface interface {
 
 	// GetOverviewDocs returns the overview documentation for a provider version
 	GetOverviewDocs(ctx context.Context, providerVersionID string) (string, error)
+
+	// GetResourcesBySubcategory returns all resources for a specific subcategory
+	GetResourcesBySubcategory(ctx context.Context, providerVersionID, subcategory string) ([]ProviderData, error)
+
+	// GetNetworkingResources returns all networking resources for a provider version
+	GetNetworkingResources(ctx context.Context, providerVersionID string) ([]ProviderData, error)
+
+	// GetComputeResources returns all compute resources for a provider version
+	GetComputeResources(ctx context.Context, providerVersionID string) ([]ProviderData, error)
+
+	// GetStorageResources returns all storage resources for a provider version
+	GetStorageResources(ctx context.Context, providerVersionID string) ([]ProviderData, error)
+
+	// GetDatabaseResources returns all database resources for a provider version
+	GetDatabaseResources(ctx context.Context, providerVersionID string) ([]ProviderData, error)
+
+	// GetSecurityResources returns all security resources for a provider version
+	GetSecurityResources(ctx context.Context, providerVersionID string) ([]ProviderData, error)
+
+	// GetDataSourcesBySubcategory returns all data sources for a specific subcategory
+	GetDataSourcesBySubcategory(ctx context.Context, providerVersionID, subcategory string) ([]ProviderData, error)
+
+	// GetProviderResourceSummary creates a structured summary of all provider resources and data sources
+	GetProviderResourceSummary(ctx context.Context, namespace, name, version string) (*ProviderResourceSummary, error)
 }
 
 // ModulesServiceInterface defines the interface for module operations

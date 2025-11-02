@@ -178,6 +178,7 @@ func registerAllTestSuites(runner *tests.TestRunner, client *registry.Client, lo
 	suites["Validation"] = tests.NewValidationTests(client, logger)
 	suites["Error Handling"] = tests.NewErrorTests(client, logger)
 	suites["Performance"] = tests.NewPerformanceTests(client, logger)
+	suites["Subcategory"] = tests.NewSubcategoryTests(client, logger)
 
 	// Register with runner
 	for name, suite := range suites {
