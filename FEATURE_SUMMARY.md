@@ -302,7 +302,7 @@ To contribute to subcategory filtering features:
 
 For questions or issues:
 
-- **GitHub Issues**: https://github.com/TahirRiaz/terralense-registry-client/issues
+- **GitHub Issues**: https://github.com/TahirRiaz/terralens-registry-client/issues
 - **Documentation**: README.md
 - **Examples**: cmd/
 

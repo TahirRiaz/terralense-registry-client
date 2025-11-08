@@ -174,7 +174,7 @@ go run ./cmd -list-tests
 
 **Installation:**
 ```bash
-go get github.com/TahirRiaz/terralense-registry-client/registry@v1.1.0
+go get github.com/TahirRiaz/terralens-registry-client/registry@v1.1.0
 ```
 
 **Quick Example:**
@@ -186,7 +186,7 @@ import (
     "fmt"
     "log"
 
-    "github.com/TahirRiaz/terralense-registry-client/registry"
+    "github.com/TahirRiaz/terralens-registry-client/registry"
 )
 
 func main() {

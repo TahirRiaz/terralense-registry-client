@@ -9,8 +9,8 @@ import (
 	"strings"
 	"time"
 
-	"github.com/TahirRiaz/terralense-registry-client/registry"
-	"github.com/TahirRiaz/terralense-registry-client/tests"
+	"github.com/TahirRiaz/terralens-registry-client/registry"
+	"github.com/TahirRiaz/terralens-registry-client/tests"
 
 	"github.com/sirupsen/logrus"
 )
@@ -120,7 +120,7 @@ func createClient(config *Config, logger *logrus.Logger) (*registry.Client, erro
 		registry.WithLogger(logger),
 		registry.WithTimeout(30*time.Second),
 		registry.WithRateLimit(config.RateLimit, config.RatePeriod),
-		registry.WithUserAgent("terralense-registry-client/1.0"),
+		registry.WithUserAgent("terralens-registry-client/1.0"),
 	)
 }
 

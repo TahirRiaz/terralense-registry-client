@@ -142,11 +142,11 @@ go run ./cmd -mode=test -suite="Performance" -test="Large Result Set" -timeout=1
 
 ```bash
 # Build the binary
-go build -o terralense-client ./cmd
+go build -o terralens-client ./cmd
 
 # Run tests using binary
-./terralense-client -mode=test -suite="Modules"
-./terralense-client -list-tests
+./terralens-client -mode=test -suite="Modules"
+./terralens-client -list-tests
 ```
 
 ## Test Suites Overview
@@ -268,7 +268,7 @@ package tests
 
 import (
     "context"
-    "terralense-registry-client/registry"
+    "terralens-registry-client/registry"
     "github.com/sirupsen/logrus"
 )
 

@@ -1,7 +1,7 @@
 # Terraform Registry Client
 
-[![Go Reference](https://pkg.go.dev/badge/github.com/TahirRiaz/terralense-registry-client.svg)](https://pkg.go.dev/github.com/TahirRiaz/terralense-registry-client)
-[![Go Report Card](https://goreportcard.com/badge/github.com/TahirRiaz/terralense-registry-client)](https://goreportcard.com/report/github.com/TahirRiaz/terralense-registry-client)
+[![Go Reference](https://pkg.go.dev/badge/github.com/TahirRiaz/terralens-registry-client.svg)](https://pkg.go.dev/github.com/TahirRiaz/terralens-registry-client)
+[![Go Report Card](https://goreportcard.com/badge/github.com/TahirRiaz/terralens-registry-client)](https://goreportcard.com/report/github.com/TahirRiaz/terralens-registry-client)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
 A robust Go client library for interacting with the Terraform Registry API. This library provides comprehensive access to modules, providers, and policies with built-in rate limiting, retries, and error handling.
@@ -19,7 +19,7 @@ A robust Go client library for interacting with the Terraform Registry API. This
 ## Installation
 
 ```bash
-go get github.com/TahirRiaz/terralense-registry-client/registry
+go get github.com/TahirRiaz/terralens-registry-client/registry
 ```
 
 ## Quick Start
@@ -32,7 +32,7 @@ import (
     "fmt"
     "log"
     
-    "github.com/TahirRiaz/terralense-registry-client/registry"
+    "github.com/TahirRiaz/terralens-registry-client/registry"
 )
 
 func main() {

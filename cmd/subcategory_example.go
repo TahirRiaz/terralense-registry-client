@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/TahirRiaz/terralense-registry-client/registry"
+	"github.com/TahirRiaz/terralens-registry-client/registry"
 	"github.com/sirupsen/logrus"
 )
 
@@ -279,7 +279,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/TahirRiaz/terralense-registry-client/registry"
+	"github.com/TahirRiaz/terralens-registry-client/registry"
 )
 
 func main() {

@@ -114,7 +114,7 @@ git push origin v1.1.0
 
 ### Step 6: Create GitHub Release
 
-1. Go to: https://github.com/TahirRiaz/terralense-registry-client/releases/new
+1. Go to: https://github.com/TahirRiaz/terralens-registry-client/releases/new
 
 2. **Tag version**: Select `v1.1.0` from dropdown
 
@@ -132,11 +132,11 @@ git push origin v1.1.0
 
 ```bash
 # Test installation of new version
-go get github.com/TahirRiaz/terralense-registry-client/registry@v1.1.0
+go get github.com/TahirRiaz/terralens-registry-client/registry@v1.1.0
 
 # Verify it works
 go run -c "package main
-import \"github.com/TahirRiaz/terralense-registry-client/registry\"
+import \"github.com/TahirRiaz/terralens-registry-client/registry\"
 func main() {
     println(registry.SubcategoryNetworking)
 }"
@@ -234,6 +234,6 @@ After release, verify:
 ## 📞 Support
 
 For issues or questions:
-- GitHub Issues: https://github.com/TahirRiaz/terralense-registry-client/issues
+- GitHub Issues: https://github.com/TahirRiaz/terralens-registry-client/issues
 - Documentation: README.md
 - Examples: cmd/subcategory_example.go

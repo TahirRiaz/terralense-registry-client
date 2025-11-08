@@ -1,4 +1,4 @@
-module github.com/TahirRiaz/terralense-registry-client
+module github.com/TahirRiaz/terralens-registry-client
 
 go 1.23.3
 
